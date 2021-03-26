@@ -13,9 +13,4 @@ namespace UnSave.Serialization
         IUnrealProperty Deserialize(string name, string type, long valueLength, BinaryReader reader, PropertySerializer serializer);
         void Serialize(IUnrealProperty prop, BinaryWriter writer, PropertySerializer serializer);
     }
-
-    public interface IUnrealPropertyJsonSerializer
-    {
-        
-    }
 }

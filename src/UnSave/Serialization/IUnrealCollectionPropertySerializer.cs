@@ -8,6 +8,6 @@ namespace UnSave.Serialization
     {
         IEnumerable<string> Types { get; }
         IEnumerable<IUnrealProperty> Deserialize(string name, string type, long valueLength, int count, BinaryReader reader, PropertySerializer serializer);
-        // void Serialize(IEnumerable<IUnrealProperty> prop, BinaryWriter writer, PropertySerializer serializer);
+        void Serialize(IEnumerable<IUnrealProperty> prop, string itemType, BinaryWriter writer, PropertySerializer serializer);
     }
 }

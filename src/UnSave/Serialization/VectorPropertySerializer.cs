@@ -4,7 +4,7 @@ using UnSave.Types;
 
 namespace UnSave.Serialization
 {
-    public class VectorPropertySerializer : UnrealPropertySerializer<UEVectorStructProperty>, IUnrealStructSerializer
+    public class VectorPropertySerializer : UnrealPropertySerializer<UEVectorStructProperty>
     {
         public IUnrealProperty DeserializeStruct(BinaryReader reader)
         {

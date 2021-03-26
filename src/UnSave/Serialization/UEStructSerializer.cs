@@ -14,7 +14,7 @@ namespace UnSave.Serialization
         }
 
         private IEnumerable<IUnrealStructSerializer> Serializers { get; set; }
-        private UEStructProperty _structProp;
+        // private UEStructProperty _structProp;
 
         public IEnumerable<string> Types => new[] {"StructProperty"};
         public IEnumerable<IUnrealProperty> Deserialize(string name, string baseType, long valueLength, int count, BinaryReader reader, PropertySerializer serializer)
@@ -43,6 +43,26 @@ namespace UnSave.Serialization
             }
         }
 
+        public void Serialize(IEnumerable<IUnrealProperty> props, string itemType, BinaryWriter writer, PropertySerializer serializer)
+        {
+            writer.WriteUEString(itemType);
+            writer.Write(Guid.Empty.ToByteArray());
+            writer.Write(false); //terminator
+            foreach (var structProp in props.Cast<UEStructProperty>())
+            {
+                try
+                {
+                    serializer.WriteItem(structProp, writer);
+                    break;
+                }
+                catch (FormatException)
+                {
+                    //ignored
+                }
+                WriteStructValue(structProp, writer, serializer);
+            }
+        }
+
         public IUnrealProperty Deserialize(string name, string baseType, long valueLength, BinaryReader reader, PropertySerializer serializer)
         {
             
@@ -67,18 +87,25 @@ namespace UnSave.Serialization
             {
                 //ignored
             }
-            _structProp = ReadStructValue(name, itemType, reader, valueLength, serializer);
-            return _structProp;
+            var structProp = ReadStructValue(name, itemType, reader, valueLength, serializer);
+            return structProp;
         }
 
         public void Serialize(IUnrealProperty prop, BinaryWriter writer, PropertySerializer serializer)
         {
-            writer.WriteUEString(_structProp.StructType);
+            var structProp = prop as UEStructProperty;
+            writer.WriteUEString(structProp.StructType);
             writer.Write(Guid.Empty.ToByteArray());
             writer.Write(false);
-            var typeSerializer = Serializers.FirstOrDefault(s => s.SupportsType(_structProp.StructType)) ?? new UEGenericStructProperty(serializer) {_structType = _structProp.StructType};
+            var typeSerializer = Serializers.FirstOrDefault(s => s.SupportsType(structProp.StructType)) ?? new UEGenericStructProperty(serializer) {_structType = structProp.StructType};
             typeSerializer.SerializeStruct(writer);
             
+        }
+
+        private void WriteStructValue(UEStructProperty prop, BinaryWriter writer, PropertySerializer propSerializer)
+        {
+            var typeSerializer = Serializers.FirstOrDefault(s => s.SupportsType(prop.StructType)) ?? new UEGenericStructProperty(propSerializer) {_structType = prop.StructType};
+            typeSerializer.SerializeStruct(writer);
         }
         
         protected UEStructProperty ReadStructValue(string name, string type, BinaryReader reader, long valueLength,
