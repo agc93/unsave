@@ -26,7 +26,7 @@ namespace UnSave
             var provider = services.BuildServiceProvider(new ServiceProviderOptions() {ValidateOnBuild = true});
             var serializer = provider.GetService<SaveSerializer>();
             using var stream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Conquest.sav", FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var outStream = File.OpenWrite(@"X:\ProjectWingman\Saves\Working\SaveGames\Conquest.build.sav");
+            using var outStream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Conquest.build.sav", FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
             var save = serializer.Read(stream);
             // var credits = save.Get<Types.UEIntProperty>("CampaignCredits").Value;
             // var json = JsonSerializer.Serialize(save);

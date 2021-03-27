@@ -119,7 +119,7 @@ namespace UnSave
             propSerializer.Serialize(prop, writer, this);
         }
 
-        public virtual void Write(IUnrealProperty prop, BinaryWriter writer, bool skipHeader = false)
+        public virtual void Write(IUnrealProperty prop, BinaryWriter writer)
         {
             if ((prop.Name == "None" || prop.Name == null) && prop is UENoneProperty noneProperty)
             {
@@ -141,9 +141,6 @@ namespace UnSave
                 noneProperty.Serialize(noneProperty, writer, this);
                 return;
             }
-            /*writer.WriteUEString(prop.Name);
-            writer.WriteUEString(prop.Type);
-            writer.WriteInt64(prop.ValueLength);*/
             Serialize(prop, itemType, writer);
             // Write(prop, writer, true);
         }

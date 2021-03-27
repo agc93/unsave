@@ -75,12 +75,13 @@ namespace UnSave.Serialization
         {
             writer.WriteUEString(props.First().Name);
             writer.WriteUEString(itemType);
-            // writer.Write(Guid.Empty.ToByteArray());
-            // writer.Write(false); //terminator
             writer.Write(props.First().ValueLength);
+            writer.WriteUEString((props.First() as UEStructProperty).StructType);
+            writer.Write(Guid.Empty.ToByteArray());
+            writer.Write(false); //terminator
             foreach (var structProp in props.Cast<UEStructProperty>())
             {
-                try
+                /*try
                 {
                     serializer.WriteItem(structProp, itemType, writer);
                     continue;
@@ -88,7 +89,7 @@ namespace UnSave.Serialization
                 catch (FormatException)
                 {
                     //ignored
-                }
+                }*/
                 WriteStructValue(structProp, writer, serializer);
             }
         }
@@ -99,8 +100,6 @@ namespace UnSave.Serialization
             writer.WriteUEString(structProp.StructType);
             writer.Write(Guid.Empty.ToByteArray());
             writer.Write(false);
-            // var typeSerializer = Serializers.FirstOrDefault(s => s.SupportsType(structProp.StructType)) ?? new UEGenericStructProperty(serializer) {_structType = structProp.StructType};
-            // writer.WriteUEString(prop.Name);
             try
             {
                 serializer.WriteItem(structProp, structProp.StructType, writer);
@@ -121,15 +120,7 @@ namespace UnSave.Serialization
             var structProperty = baseProp as UEGenericStructProperty;
             foreach (var prop in structProperty.Properties)
             {
-                if (!(prop is UENoneProperty))
-                {
-                    //TODO: this shouldn't be happening here
-                    writer.WriteUEString(prop.Name);
-                    writer.WriteUEString(prop.Type);
-                    writer.WriteInt64(prop.ValueLength);
-                }
-
-                propSerializer.WriteItem(prop, prop.Type, writer);
+                propSerializer.Write(prop, writer);
             }
 
         }
