@@ -6,8 +6,10 @@ using UnSave.Serialization;
 namespace UnSave.Types
 {
     [DebuggerDisplay("{" + nameof(StructType) + "}", Name = "{Name}")]
-    public class UEGenericStructProperty : UEStructProperty, IUnrealStructSerializer
+    public class UEGenericStructProperty : UEStructProperty
     {
+        // public override string Type => "StructProperty";
+
         public UEGenericStructProperty(PropertySerializer serializer)
         {
             _serializer = serializer;
@@ -18,28 +20,13 @@ namespace UnSave.Types
 
         public override string StructType => _structType;
 
-        public IUnrealProperty DeserializeStruct(BinaryReader reader)
-        {
-            while (_serializer.Read(reader) is IUnrealProperty prop)
-            {
-                Properties.Add(prop);
-                if (prop is UENoneProperty)
-                {
-                    break;
-                }
-            }
-
-            return this;
-        }
+        
         
         public List<IUnrealProperty> Properties = new List<IUnrealProperty>();
 
-        public void SerializeStruct(BinaryWriter writer)
+        public UEGenericStructProperty()
         {
-            foreach (var prop in Properties)
-            {
-                _serializer.Write(prop, writer);
-            }
+            
         }
 
         public bool SupportsType(string type) => false;

@@ -11,17 +11,19 @@ namespace UnSave.Types
         public float X, Y, Z;
         public IUnrealProperty DeserializeStruct(BinaryReader reader)
         {
-            X = reader.ReadSingle();
-            Y = reader.ReadSingle();
-            Z = reader.ReadSingle();
-            return this;
+            var prop = new UEVectorStructProperty();
+            prop.X = reader.ReadSingle();
+            prop.Y = reader.ReadSingle();
+            prop.Z = reader.ReadSingle();
+            return prop;
         }
 
-        public void SerializeStruct(BinaryWriter writer)
+        public void SerializeStruct(IUnrealProperty baseProp, BinaryWriter writer)
         {
-            writer.WriteSingle(X);
-            writer.WriteSingle(Y);
-            writer.WriteSingle(Z);
+            var prop = baseProp as UEVectorStructProperty;
+            writer.WriteSingle(prop.X);
+            writer.WriteSingle(prop.Y);
+            writer.WriteSingle(prop.Z);
         }
         public bool SupportsType(string type) => type == StructType;
     }

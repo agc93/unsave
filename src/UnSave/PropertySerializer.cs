@@ -16,6 +16,18 @@ namespace UnSave
         }
         private List<IUnrealPropertySerializer> Properties { get; set; }
         private List<IUnrealCollectionPropertySerializer> CollectionProperties { get; set; }
+
+        private IUnrealPropertySerializer GetSerializer(string itemType)
+        {
+            var propertySerializer = Properties.FirstOrDefault(p => p.Types.Contains(itemType));
+            if (propertySerializer == null)
+            {
+                //didn't find anything on first pass, check for struct matches
+                Properties.Where(t => t.Types.Contains("StructProperty"));
+            }
+
+            return null;
+        }
         public IUnrealProperty Read(BinaryReader reader)
         {
             if (reader.PeekChar() < 0)
@@ -97,6 +109,16 @@ namespace UnSave
             return result;
         }
 
+        private void Serialize(IUnrealProperty prop, string itemType, BinaryWriter writer)
+        {
+            var propSerializer = Properties.FirstOrDefault(p => p.Types.Contains(itemType));
+            if (propSerializer == null)
+            {
+                throw new FormatException($"Offset: 0x{prop.Address:x8}. Unknown value type '{prop.Type}' of item '{prop.Name}'");
+            }
+            propSerializer.Serialize(prop, writer, this);
+        }
+
         public virtual void Write(IUnrealProperty prop, BinaryWriter writer, bool skipHeader = false)
         {
             if ((prop.Name == "None" || prop.Name == null) && prop is UENoneProperty noneProperty)
@@ -105,25 +127,25 @@ namespace UnSave
             }
             else
             {
-                var propSerializer = Properties.FirstOrDefault(p => p.Types.Contains(prop.Type));
-                if (propSerializer == null)
-                {
-                    throw new FormatException($"Offset: 0x{prop.Address:x8}. Unknown value type '{prop.Type}' of item '{prop.Name}'");
-                }
-
-                if (!skipHeader)
-                {
-                    writer.WriteUEString(prop.Name);
-                    writer.WriteUEString(prop.Type);
-                    writer.WriteInt64(prop.ValueLength);
-                }
-                propSerializer.Serialize(prop, writer, this);
+                writer.WriteUEString(prop.Name);
+                writer.WriteUEString(prop.Type);
+                writer.WriteInt64(prop.ValueLength);
+                Serialize(prop, prop.Type, writer);
             }
         }
 
-        public virtual void WriteItem(IUnrealProperty prop, BinaryWriter writer)
+        public virtual void WriteItem(IUnrealProperty prop, string itemType, BinaryWriter writer)
         {
-            Write(prop, writer, true);
+            if ((prop.Name == "None" || prop.Name == null) && prop is UENoneProperty noneProperty)
+            {
+                noneProperty.Serialize(noneProperty, writer, this);
+                return;
+            }
+            /*writer.WriteUEString(prop.Name);
+            writer.WriteUEString(prop.Type);
+            writer.WriteInt64(prop.ValueLength);*/
+            Serialize(prop, itemType, writer);
+            // Write(prop, writer, true);
         }
 
         public virtual void WriteSet(IEnumerable<IUnrealProperty> props, string itemType, BinaryWriter writer)
@@ -137,22 +159,23 @@ namespace UnSave
             } else {
                 //not a known set type (so probably a bunch of strings or whatever)
                 //no collection available, try just doing it prop-by-prop
-                writer.WriteUEString(itemType);
+                /*writer.WriteUEString(itemType);
                 writer.Write(false); //terminator
-                writer.WriteInt32(props.Count());
+                writer.WriteInt32(props.Count());*/
 
                 var allProps = props.ToList();
                 for (int i=0; i<allProps.Count; i++)
                 {
                     var propItem = allProps[i];
-                    if (i == 0)
+                    WriteItem(propItem, itemType, writer);
+                    /*if (i == 0)
                     {
                         Write(propItem, writer);
                     }
                     else
                     {
-                        WriteItem(propItem, writer);
-                    }
+                        WriteItem(propItem, itemType, writer);
+                    }*/
                 }
                 var bareProps = new List<IUnrealProperty>();
                 // throw new FormatException($"Offset: 0x{itemOffset:x8}. Unknown value type '{type}' of item '{name}'");

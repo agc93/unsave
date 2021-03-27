@@ -13,18 +13,22 @@ namespace UnSave.Serialization
         public IUnrealProperty Deserialize(string name, string type, long valueLength, BinaryReader reader,
             PropertySerializer serializer)
         {
-            var prop = new UEStringProperty();
-            
             if (valueLength > -1)
             {
                 var terminator = reader.ReadByte();
                 if (terminator != 0)
                     throw new FormatException($"Offset: 0x{reader.BaseStream.Position - 1:x8}. Expected terminator (0x00), but was (0x{terminator:x2})");
             }
-            // ValueLength = valueLength;
+            var value = reader.ReadUEString();
 
-            prop.Value = reader.ReadUEString();
-            return prop;
+            return type switch
+            {
+                "StrProperty" => new UEStringProperty() {Value = value},
+                "NameProperty" => new UEStringProperty() {Value = value, ValueType = "NameProperty"},
+                "ObjectProperty" => new UEStringProperty() {Value = value, ValueType = "ObjectProperty"},
+                "SoftObjectProperty" => new UEStringProperty() {Value = value, ValueType = "SoftObjectProperty"},
+                _ => throw new FormatException("Unrecognised string format!")
+            };
         }
         
         public void Serialize(IUnrealProperty baseProp, BinaryWriter writer, PropertySerializer serializer)

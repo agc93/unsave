@@ -6,7 +6,7 @@ namespace UnSave.Serialization
     public interface IUnrealStructSerializer
     {
         IUnrealProperty DeserializeStruct(BinaryReader reader);
-        void SerializeStruct(BinaryWriter writer);
+        void SerializeStruct(IUnrealProperty structProp, BinaryWriter writer);
         bool SupportsType(string type);
     }
 }

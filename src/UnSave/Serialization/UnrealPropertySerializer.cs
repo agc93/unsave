@@ -7,8 +7,8 @@ namespace UnSave.Serialization
 {
     public abstract class UnrealPropertySerializer<T> : IUnrealPropertySerializer where T : IUnrealProperty, new()
     {
-        // public virtual IEnumerable<string> Types => new[] { typeof(T).IsAssignableTo(typeof(UEStructProperty)) ? (new T() as UEStructProperty).StructType : new T().Type};
-        public virtual IEnumerable<string> Types => new[] { new T().Type};
+        public virtual IEnumerable<string> Types => new[] { typeof(T).IsAssignableTo(typeof(UEStructProperty)) ? (new T() as UEStructProperty).StructType : new T().Type};
+        // public virtual IEnumerable<string> Types => new[] { new T().Type};
         
         public virtual IUnrealProperty Deserialize(string name, string type, long valueLength,
             BinaryReader reader,

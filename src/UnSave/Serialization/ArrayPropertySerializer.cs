@@ -24,23 +24,28 @@ namespace UnSave.Serialization
 
         public override void SerializeProp(UEArrayProperty prop, BinaryWriter writer, PropertySerializer serializer)
         {
-            /*writer.WriteUEString(prop.ItemType);
+            // throw new NotImplementedException();
+            writer.WriteUEString(prop.ItemType);
             writer.Write(false); //terminator
             writer.WriteInt32(prop.Count);
 
-            for (int i=0; i<prop.Items.Count; i++)
+            serializer.WriteSet(prop.Items, prop.ItemType, writer);
+            
+            
+            /*for (int i=0; i<prop.Items.Count; i++)
             {
                 var propItem = prop.Items[i];
-                if (i == 0)
+                serializer.WriteItem(propItem, prop.ItemType, writer);
+                /*if (i == 0)
                 {
                     serializer.Write(propItem, writer);
                 }
                 else
                 {
-                    serializer.WriteItem(propItem, writer);
-                }
+                    serializer.WriteItem(propItem, prop.ItemType, writer);
+                }#1#
             }*/
-            
+
         }
     }
 }

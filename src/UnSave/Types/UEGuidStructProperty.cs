@@ -10,13 +10,15 @@ namespace UnSave.Types
         public override string StructType => "Guid";
         public IUnrealProperty DeserializeStruct(BinaryReader reader)
         {
-            Value = new Guid(reader.ReadBytes(16));
+            var prop = new UEGuidStructProperty();
+            prop.Value = new Guid(reader.ReadBytes(16));
             return this;
         }
 
-        public void SerializeStruct(BinaryWriter writer)
+        public void SerializeStruct(IUnrealProperty baseProp, BinaryWriter writer)
         {
-            writer.Write(Value.ToByteArray());
+            var prop = baseProp as UEGuidStructProperty;
+            writer.Write(prop.Value.ToByteArray());
         }
         public bool SupportsType(string type) => type == StructType;
     }
