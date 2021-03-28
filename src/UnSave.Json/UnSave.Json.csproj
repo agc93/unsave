@@ -10,6 +10,19 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <IsPackable>false</IsPackable> <!-- Temporary, while lib is WIP -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>UnSave.Json</PackageId>
+    <Description>UnSave.Json is a companion for UnSave to allow for (de)serializing Unreal Engine 4 save files to/from JSON.</Description>
+    <Authors>agc93</Authors>
+    <Copyright>© Alistair Chapman 2021</Copyright>
+    <PackageTags>unreal;modding;</PackageTags>
+    <RepositoryUrl>https://github.com/agc93/unsave</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/agc93/unsave</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>

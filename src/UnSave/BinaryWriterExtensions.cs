@@ -61,10 +61,5 @@ namespace UnSave
         {
             writer.Write(BitConverter.GetBytes(value));
         }
-
-        public static void WriteDouble(this BinaryWriter writer, double value)
-        {
-            writer.Write(BitConverter.GetBytes(value));
-        }
     }
 }

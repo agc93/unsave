@@ -25,8 +25,12 @@ namespace UnSave
             services.AddSingleton<SaveSerializer>();
             var provider = services.BuildServiceProvider(new ServiceProviderOptions() {ValidateOnBuild = true});
             var serializer = provider.GetService<SaveSerializer>();
-            using var stream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Conquest.sav", FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var outStream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Conquest.build.sav", FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+            /*using var stream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Conquest.sav", FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var outStream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Conquest.build.sav", FileMode.Create, FileAccess.ReadWrite, FileShare.Read);*/
+            /*using var stream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Campaign.sav", FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var outStream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\Campaign.build.sav", FileMode.Create, FileAccess.ReadWrite, FileShare.Read);*/
+            using var stream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\stat.sav", FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var outStream = File.Open(@"X:\ProjectWingman\Saves\Working\SaveGames\savegame.build.sav", FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
             var save = serializer.Read(stream);
             // var credits = save.Get<Types.UEIntProperty>("CampaignCredits").Value;
             // var json = JsonSerializer.Serialize(save);

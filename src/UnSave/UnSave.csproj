@@ -5,4 +5,16 @@
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>UnSave</PackageId>
+    <Description>UnSave is an extensible (de)serializer for Unreal Engine 4 save files.</Description>
+    <Authors>agc93</Authors>
+    <Copyright>© Alistair Chapman 2021</Copyright>
+    <PackageTags>unreal;modding;</PackageTags>
+    <RepositoryUrl>https://github.com/agc93/unsave</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/agc93/unsave</PackageProjectUrl>
+  </PropertyGroup>
+
 </Project>
