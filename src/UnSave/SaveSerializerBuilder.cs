@@ -12,6 +12,7 @@ namespace UnSave
             new List<IUnrealCollectionPropertySerializer>();
         public SaveSerializerBuilder AddDefaultSerializers()
         {
+            var structSerializers = new List<IUnrealStructSerializer> {new UEGuidStructProperty()};
             _propertySerializers.AddRange(new List<IUnrealPropertySerializer>
             {
                 new ArrayPropertySerializer(),
@@ -26,8 +27,9 @@ namespace UnSave
                 new StringPropertySerializer(),
                 new TextPropertySerializer(),
                 new VectorPropertySerializer(),
-                new UEStructSerializer(new List<IUnrealStructSerializer> {new UEGuidStructProperty()})
+                new UEStructSerializer(structSerializers)
             });
+            _collectionSerializers.Add(new UEStructSerializer(structSerializers));
             return this;
         }
 
