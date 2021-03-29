@@ -4,7 +4,7 @@ using UnSave.Types;
 
 namespace UnSave.Serialization
 {
-    public class IntPropertySerialize : UnrealPropertySerializer<UEIntProperty>
+    public class IntPropertySerializer : UnrealPropertySerializer<UEIntProperty>
     {
         public override UEIntProperty DeserializeProp(string name, string type, long valueLength, BinaryReader reader,
             PropertySerializer serializer)

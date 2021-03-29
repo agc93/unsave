@@ -12,7 +12,7 @@ namespace UnSave.Types
         {
             var prop = new UEGuidStructProperty();
             prop.Value = new Guid(reader.ReadBytes(16));
-            return this;
+            return prop;
         }
 
         public void SerializeStruct(IUnrealProperty baseProp, BinaryWriter writer)
