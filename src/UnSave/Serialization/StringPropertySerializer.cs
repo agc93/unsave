@@ -21,14 +21,16 @@ namespace UnSave.Serialization
             }
             var value = reader.ReadUEString();
 
-            return type switch
+            return new UEStringProperty(type) {Value = value};
+
+            /*return type switch
             {
                 "StrProperty" => new UEStringProperty() {Value = value},
-                "NameProperty" => new UEStringProperty() {Value = value, ValueType = "NameProperty"},
+                "NameProperty" => new UEStringProperty("NameProperty") {Value = value, ValueType = "NameProperty"},
                 "ObjectProperty" => new UEStringProperty() {Value = value, ValueType = "ObjectProperty"},
                 "SoftObjectProperty" => new UEStringProperty() {Value = value, ValueType = "SoftObjectProperty"},
                 _ => throw new FormatException("Unrecognised string format!")
-            };
+            };*/
         }
         
         public void Serialize(IUnrealProperty baseProp, BinaryWriter writer, PropertySerializer serializer)
