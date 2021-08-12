@@ -8,9 +8,6 @@ namespace UnSave.Extensions
         // See the attribute guidelines at 
         //  http://go.microsoft.com/fwlink/?LinkId=85236
         public SavePropertyAttribute(string savePropertyName, Type propertyType) {
-            // // TODO: Implement code here
-            // throw new NotImplementedException();
-            
         }
 
         public string PropertyName { get; set; }
