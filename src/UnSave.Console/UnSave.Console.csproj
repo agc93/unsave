@@ -5,6 +5,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UnSave.Extensions\UnSave.Extensions.csproj"
+                      
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="microsoft.extensions.dependencyinjection" Version="5.0.1" />
     <PackageReference Include="Scrutor" Version="3.3.0" />
   </ItemGroup>

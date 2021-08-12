@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>9.0</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UnSave\UnSave.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <PackageId>UnSave.Extensions</PackageId>
+        <Description>UnSave is an extensible (de)serializer for UE4 save files. This package includes source generators to simplify using UnSave in your own code base.</Description>
+        <Authors>agc93</Authors>
+        <Copyright>© Alistair Chapman 2021</Copyright>
+        <PackageTags>unreal;modding;</PackageTags>
+        <RepositoryUrl>https://github.com/agc93/unsave</RepositoryUrl>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/agc93/unsave</PackageProjectUrl>
+    </PropertyGroup>
+
+</Project>
