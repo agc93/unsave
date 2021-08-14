@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace UnSave.Extensions
@@ -25,7 +27,7 @@ namespace UnSave.Extensions
             foreach (var classDeclarationSyntax in receiver.Candidates.Select(c => c.Value))
             {
                 var model = context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree, true);
-                var declaredSymbol = model.GetDeclaredSymbol(classDeclarationSyntax);
+                var declaredSymbol = ModelExtensions.GetDeclaredSymbol(model, classDeclarationSyntax);
 
                 var field = declaredSymbol as ITypeSymbol;
 
@@ -43,8 +45,14 @@ namespace UnSave.Extensions
             var ns = classSymbol.ContainingNamespace.ToString();
             var className = classSymbol.Name;
             var builder = new ClassBuilder(ns, className);
-
-            var saveDataProp = classSymbol.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>()
+            var classProps = classSymbol.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>().ToList();
+            var parent = classSymbol.BaseType;
+            while (parent != null) {
+                var baseProps = parent.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>();
+                classProps.AddRange(baseProps);
+                parent = parent.BaseType;
+            }
+            var saveDataProp = classProps
                 .FirstOrDefault(p => p.Type.Name.Contains(nameof(GvasSaveData)));
             if (saveDataProp != null) {
                 // var propCodes = new List<string>();
