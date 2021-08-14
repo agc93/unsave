@@ -64,6 +64,15 @@ namespace UnSave.Extensions
             return readOnlyProperty;
         }
 
+        internal static string? GetValue(this AttributeData attr, string key, string? defaultValue = null) {
+            var viewPropertySpecifier =
+                attr.NamedArguments.FirstOrDefault(na => na.Key == key);
+            var viewPropertyName = string.IsNullOrWhiteSpace(viewPropertySpecifier.Key)
+                ? defaultValue
+                : viewPropertySpecifier.Value.Value as string;
+            return viewPropertyName;
+        }
+
         internal static string AddAfter(this string s, string v) {
             s = s + Environment.NewLine + v;
             return s;
