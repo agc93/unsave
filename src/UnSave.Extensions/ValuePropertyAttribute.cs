@@ -3,14 +3,15 @@
 namespace UnSave.Extensions
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class ViewPropertyAttribute : Attribute
+    public sealed class ValuePropertyAttribute : Attribute
     {
         // See the attribute guidelines at 
         //  http://go.microsoft.com/fwlink/?LinkId=85236
-        public ViewPropertyAttribute() {
+        public ValuePropertyAttribute() {
         }
         
-        public string ViewPropertyName { get; set; }
+        public string ValuePropertyName { get; set; }
         public bool ReadOnly { get; set; }
+        // public bool AllowCreate { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace UnSave.Extensions
                 }
             }
 
-            if (name is "ViewProperty" or "ViewPropertyAttribute") {
+            if (name is "ValueProperty" or "ValuePropertyAttribute") {
                 if (attribute.Parent?.Parent is PropertyDeclarationSyntax propertyDeclaration) {
                     ViewCandidates.Add(propertyDeclaration);
                 }

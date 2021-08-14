@@ -56,5 +56,17 @@ namespace UnSave.Extensions
             var typeSymbol = semanticModel.Compilation.GetTypeByMetadataName(openType.FullName);
             return typeSymbol.Construct(typeArgumentsTypeInfos.ToArray<ITypeSymbol>());
         }
+
+        internal static bool GetFlag(this AttributeData attr, string flagKey) {
+            var readOnlyPropertySpecifier = 
+                attr.NamedArguments.FirstOrDefault(na => na.Key == flagKey);
+            var readOnlyProperty = string.IsNullOrWhiteSpace(readOnlyPropertySpecifier.Key) && (bool.TryParse(readOnlyPropertySpecifier.Value.Value as string, out var roProp) && roProp);
+            return readOnlyProperty;
+        }
+
+        internal static string AddAfter(this string s, string v) {
+            s = s + Environment.NewLine + v;
+            return s;
+        }
     }
 }

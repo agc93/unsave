@@ -10,7 +10,7 @@ namespace UnSave
         /*[SaveProperty("CampaignCredits", SaveData = nameof(SaveData))]
         public UEIntProperty _ccredits;*/
         
-        [ViewProperty(ViewPropertyName = "Credits")]
+        [ValueProperty(ValuePropertyName = "Credits")]
         internal UEIntProperty CampaignCredits => SaveData.FindProperty<UEIntProperty>(p => p.Name == "CampaignCredits");
 
         public SaveModel() {
