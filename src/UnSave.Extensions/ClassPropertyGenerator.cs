@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -10,6 +11,12 @@ namespace UnSave.Extensions
         public void Initialize(GeneratorInitializationContext context) {
             context.RegisterForSyntaxNotifications(() =>
                 new AttributeReceiver<SavePropertyAttribute, ClassDeclarationSyntax>(c => c.GetFullName()));
+#if DEBUGGEN
+            if (!Debugger.IsAttached)
+            {
+                Debugger.Launch();
+            }
+#endif 
         }
 
         public void Execute(GeneratorExecutionContext context) {
@@ -55,12 +62,12 @@ namespace UnSave.Extensions
                     
                     var propCode =
                         $@"public {savePropType.Name}? {viewPropertyName} => {saveDataProp.Name}.Properties.FindProperty<{savePropType.Name}>(p => p.Name == {('"' + savePropName + '"')});";
+                    builder.AddMember(propCode);
                     if (includeValueProperty) {
-                        propCode = propCode.AddAfter(
-                            $"public {targetPropertyType.Name}? {viewPropertyName}Value => {viewPropertyName}?.Value;");
+                        builder.AddMember($"public {targetPropertyType.Name}? {viewPropertyName}Value => {viewPropertyName}?.Value;");
                     }
 
-                    builder.AddMember(propCode);
+                    
                 }
 
                 var gen = builder.Build();

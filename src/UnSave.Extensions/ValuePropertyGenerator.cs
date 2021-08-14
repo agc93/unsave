@@ -18,7 +18,7 @@ namespace UnSave.Extensions
         public void Initialize(GeneratorInitializationContext context) {
             // context.RegisterForSyntaxNotifications(() => new AttributeReceiver<ValuePropertyAttribute, PropertyDeclarationSyntax(s => s.));
             context.RegisterForSyntaxNotifications(() => new AttributeReceiver<ValuePropertyAttribute, PropertyDeclarationSyntax>(GetName));
-#if DEBUG
+#if DEBUGGEN
             if (!Debugger.IsAttached)
             {
                 Debugger.Launch();

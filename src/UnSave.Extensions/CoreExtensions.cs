@@ -60,7 +60,7 @@ namespace UnSave.Extensions
         internal static bool GetFlag(this AttributeData attr, string flagKey) {
             var readOnlyPropertySpecifier = 
                 attr.NamedArguments.FirstOrDefault(na => na.Key == flagKey);
-            var readOnlyProperty = string.IsNullOrWhiteSpace(readOnlyPropertySpecifier.Key) && (bool.TryParse(readOnlyPropertySpecifier.Value.Value as string, out var roProp) && roProp);
+            var readOnlyProperty = !string.IsNullOrWhiteSpace(readOnlyPropertySpecifier.Key) && (bool.TryParse(readOnlyPropertySpecifier.Value.Value.ToString(), out var roProp) && roProp);
             return readOnlyProperty;
         }
 

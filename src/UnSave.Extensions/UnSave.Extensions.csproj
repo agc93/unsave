@@ -4,6 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>9.0</LangVersion>
         <Nullable>enable</Nullable>
+        <Configurations>Debug;Release;Debug Source</Configurations>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,6 +29,12 @@
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/agc93/unsave</PackageProjectUrl>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug Source' ">
+      <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
+      <Optimize Condition=" '$(Optimize)' == '' ">false</Optimize>
+      <DefineConstants>TRACE;DEBUGGEN;</DefineConstants>
     </PropertyGroup>
 
 </Project>
