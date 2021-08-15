@@ -11,7 +11,6 @@ namespace UnSave.Types
     {
         public override string Type => TypeName;
         public static string TypeName => "IntProperty";
-        // public string Name { get; set; }
-
+        public override long ValueLength { get; set; } = 4;
     }
 }

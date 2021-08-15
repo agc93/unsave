@@ -74,8 +74,6 @@ namespace UnSave.Extensions
                     if (includeValueProperty) {
                         builder.AddMember($"public {targetPropertyType.Name}? {viewPropertyName}Value => {viewPropertyName}?.Value;");
                     }
-
-                    
                 }
 
                 var gen = builder.Build();

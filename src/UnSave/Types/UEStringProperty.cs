@@ -20,6 +20,16 @@ namespace UnSave.Types
         }
         public override string Type => ValueType;
         public string ValueType { get; } = "StrProperty";
+        private string _value;
 
+        public override string Value
+        {
+            get => _value;
+            set
+            {
+                _value = value;
+                ValueLength = _value.Length + 5;
+            } 
+        }
     }
 }
