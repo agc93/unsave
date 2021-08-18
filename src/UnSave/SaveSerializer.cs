@@ -50,7 +50,7 @@ namespace UnSave
             }
         }
         
-        public void Write(FileStream stream, GvasSaveData data)
+        public void Write(Stream stream, GvasSaveData data)
         {
             using (var writer = new BinaryWriter(stream, Encoding.ASCII, true))
             {
