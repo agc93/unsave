@@ -43,9 +43,9 @@ namespace UnSave.Extensions
             return this;
         }
 
-        public ClassBuilder AddProperty(ITypeSymbol propertyType, string propertyName, string propertyBody) {
+        public ClassBuilder AddProperty(ITypeSymbol propertyType, string propertyName, params string[] propertyBody) {
             Members.Add($@"public {propertyType.Name}? {propertyName} {{
-    {propertyBody}
+    {string.Join(Environment.NewLine, propertyBody)}
 }}");
             return this;
         }

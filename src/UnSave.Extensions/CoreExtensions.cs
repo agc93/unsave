@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -73,9 +74,21 @@ namespace UnSave.Extensions
             return viewPropertyName;
         }
 
-        internal static string AddAfter(this string s, string v) {
-            s = s + Environment.NewLine + v;
-            return s;
+        internal static IEnumerable<IPropertySymbol> GetProperties(this INamedTypeSymbol classSymbol, string? propertyTypeMatch = null) {
+            var classProps = classSymbol.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>().ToList();
+            var parent = classSymbol.BaseType;
+            while (parent != null) {
+                var baseProps = parent.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>();
+                classProps.AddRange(baseProps);
+                parent = parent.BaseType;
+            }
+
+            return classProps.Where(p =>
+                string.IsNullOrWhiteSpace(propertyTypeMatch) || p.Type.Name.Contains(propertyTypeMatch));
+        }
+
+        internal static IEnumerable<IPropertySymbol> GetProperties<TProperty>(this INamedTypeSymbol classSymbol) {
+            return classSymbol.GetProperties(typeof(TProperty).Name);
         }
     }
 }
