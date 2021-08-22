@@ -46,11 +46,11 @@ namespace UnSave.Extensions
         }
 
         private string? GetTypeName(ITypeSymbol propertyType) {
-            return UseTypeName ? $"{propertyType.Name}?" : propertyType.ToString();
+            return UseTypeName ? $"{propertyType.Name}" : propertyType.ToString().TrimEnd('?');
         }
 
         public ClassBuilder AddProperty(ITypeSymbol propertyType, string propertyName, params string[] propertyBody) {
-            Members.Add($@"public {GetTypeName(propertyType)} {propertyName} {{
+            Members.Add($@"public {GetTypeName(propertyType)}? {propertyName} {{
     {string.Join(Environment.NewLine, propertyBody)}
 }}");
             return this;

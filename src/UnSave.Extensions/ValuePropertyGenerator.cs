@@ -74,7 +74,7 @@ namespace UnSave.Extensions
     {{
             if ({name}?.Value is not null && value is not null)
             {{
-                {name}.Value = (int)value;
+                {name}.Value = ({targetPropertyType})value;
             }}
             else if ({name}?.Value is null && value is {targetPropertyType} flValue && flValue != default({targetPropertyType}))
             {{
@@ -100,7 +100,7 @@ namespace UnSave.Extensions
                 }
                 else {
                         setter =
-                            $"set {{ if ({name}?.Value is not null) {name}.Value = ({targetPropertyType.Name})value; }}";
+                            $"set {{ if ({name}?.Value is not null) {name}.Value = ({targetPropertyType})value; }}";
                 }
             }
             builder.AddProperty(targetPropertyType, viewPropertyName, getter, setter);
