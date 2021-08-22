@@ -17,6 +17,8 @@ namespace UnSave.Extensions
 
         private string ClassName { get; }
 
+        public bool UseTypeName { get; set; } = false;
+
         private List<string> Namespaces { get; } = new();
         public ClassBuilder AddImport(string ns) {
             Namespaces.Add(ns);
@@ -43,8 +45,12 @@ namespace UnSave.Extensions
             return this;
         }
 
+        private string? GetTypeName(ITypeSymbol propertyType) {
+            return UseTypeName ? $"{propertyType.Name}?" : propertyType.ToString();
+        }
+
         public ClassBuilder AddProperty(ITypeSymbol propertyType, string propertyName, params string[] propertyBody) {
-            Members.Add($@"public {propertyType.Name}? {propertyName} {{
+            Members.Add($@"public {GetTypeName(propertyType)} {propertyName} {{
     {string.Join(Environment.NewLine, propertyBody)}
 }}");
             return this;

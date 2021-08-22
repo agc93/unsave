@@ -8,7 +8,7 @@ namespace UnSave.Extensions
 {
     public static class CoreExtensions
     {
-        internal static string ExtractName(this TypeSyntax type)
+        public static string ExtractName(this TypeSyntax? type)
         {
             while (type != null)
             {
@@ -29,7 +29,7 @@ namespace UnSave.Extensions
             return null;
         }
         
-        public static string FirstCharToUpper(this string input) =>
+        internal static string FirstCharToUpper(this string input) =>
             input switch
             {
                 null => throw new ArgumentNullException(nameof(input)),
@@ -58,14 +58,14 @@ namespace UnSave.Extensions
             return typeSymbol.Construct(typeArgumentsTypeInfos.ToArray<ITypeSymbol>());
         }
 
-        internal static bool GetFlag(this AttributeData attr, string flagKey) {
+        public static bool GetFlag(this AttributeData attr, string flagKey) {
             var readOnlyPropertySpecifier = 
                 attr.NamedArguments.FirstOrDefault(na => na.Key == flagKey);
             var readOnlyProperty = !string.IsNullOrWhiteSpace(readOnlyPropertySpecifier.Key) && (bool.TryParse(readOnlyPropertySpecifier.Value.Value.ToString(), out var roProp) && roProp);
             return readOnlyProperty;
         }
 
-        internal static string? GetValue(this AttributeData attr, string key, string? defaultValue = null) {
+        public static string? GetValue(this AttributeData attr, string key, string? defaultValue = null) {
             var viewPropertySpecifier =
                 attr.NamedArguments.FirstOrDefault(na => na.Key == key);
             var viewPropertyName = string.IsNullOrWhiteSpace(viewPropertySpecifier.Key)
@@ -74,7 +74,7 @@ namespace UnSave.Extensions
             return viewPropertyName;
         }
 
-        internal static IEnumerable<IPropertySymbol> GetProperties(this INamedTypeSymbol classSymbol, string? propertyTypeMatch = null) {
+        public static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol classSymbol, string? propertyTypeMatch = null) {
             var classProps = classSymbol.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>().ToList();
             var parent = classSymbol.BaseType;
             while (parent != null) {
@@ -87,8 +87,16 @@ namespace UnSave.Extensions
                 string.IsNullOrWhiteSpace(propertyTypeMatch) || p.Type.Name.Contains(propertyTypeMatch));
         }
 
-        internal static IEnumerable<IPropertySymbol> GetProperties<TProperty>(this INamedTypeSymbol classSymbol) {
-            return classSymbol.GetProperties(typeof(TProperty).Name);
+        public static IEnumerable<ITypeSymbol> GetTypes(this ITypeSymbol classSymbol, string typeNameMatch = null) {
+            var classProps = new List<ITypeSymbol>() { classSymbol };
+            var parent = classSymbol.BaseType;
+            while (parent != null) {
+                classProps.Add(parent);
+                parent = parent.BaseType;
+            }
+
+            return classProps.Where(p =>
+                string.IsNullOrWhiteSpace(typeNameMatch) || p.Name.Contains(typeNameMatch));
         }
     }
 }

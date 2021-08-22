@@ -45,15 +45,8 @@ namespace UnSave.Extensions
             var ns = classSymbol.ContainingNamespace.ToString();
             var className = classSymbol.Name;
             var builder = new ClassBuilder(ns, className);
-            var classProps = classSymbol.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>().ToList();
-            var parent = classSymbol.BaseType;
-            while (parent != null) {
-                var baseProps = parent.GetMembers().Where(m => m is IPropertySymbol).Cast<IPropertySymbol>();
-                classProps.AddRange(baseProps);
-                parent = parent.BaseType;
-            }
-            var saveDataProp = classProps
-                .FirstOrDefault(p => p.Type.Name.Contains(nameof(GvasSaveData)));
+            var classProps = classSymbol.GetProperties(nameof(GvasSaveData));
+            var saveDataProp = classProps.FirstOrDefault();
             if (saveDataProp != null) {
                 // var propCodes = new List<string>();
                 // var nss = new List<string>();
@@ -72,7 +65,7 @@ namespace UnSave.Extensions
                         $@"public {savePropType.Name}? {viewPropertyName} => {saveDataProp.Name}.Properties.FindProperty<{savePropType.Name}>(p => p.Name == {('"' + savePropName + '"')});";
                     builder.AddMember(propCode);
                     if (includeValueProperty) {
-                        builder.AddMember($"public {targetPropertyType.Name}? {viewPropertyName}Value => {viewPropertyName}?.Value;");
+                        builder.AddMember($"public {targetPropertyType} {viewPropertyName}Value => {viewPropertyName}?.Value;");
                     }
                 }
 
