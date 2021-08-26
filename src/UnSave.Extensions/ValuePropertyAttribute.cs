@@ -13,5 +13,6 @@ namespace UnSave.Extensions
         public string ValuePropertyName { get; set; }
         public bool ReadOnly { get; set; }
         public string CreateProperty { get; set; }
+        public bool AllowDefault { get; set; }
     }
 }

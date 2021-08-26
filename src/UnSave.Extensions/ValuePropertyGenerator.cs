@@ -62,11 +62,13 @@ namespace UnSave.Extensions
                 ? $"{name}Value"
                 : viewPropertySpecifier.Value.Value as string;
             var readOnlyProperty = attr.GetFlag(nameof(ValuePropertyAttribute.ReadOnly));
+            var allowDefault = attr.GetFlag(nameof(ValuePropertyAttribute.AllowDefault));
             var createProp = attr.GetValue(nameof(ValuePropertyAttribute.CreateProperty));
             var getter = @$"get {{ return {name}?.Value; }}";
             var setter = string.Empty;
             if (!readOnlyProperty) {
                 if (!string.IsNullOrWhiteSpace(createProp)) {
+                    var defaultCondition = allowDefault ? string.Empty : $" && flValue != default({targetPropertyType}";
                     var classProps = property.ContainingType.GetProperties(nameof(GvasSaveData));
                     var saveDataProp = classProps.FirstOrDefault();
                     if (saveDataProp != null) {
@@ -76,7 +78,7 @@ namespace UnSave.Extensions
             {{
                 {name}.Value = ({targetPropertyType})value;
             }}
-            else if ({name}?.Value is null && value is {targetPropertyType} flValue && flValue != default({targetPropertyType}))
+            else if ({name}?.Value is null && value is {targetPropertyType} flValue{defaultCondition}))
             {{
                 //value is good, but property isn't
                 {saveDataProp.Name}.Properties.Insert({saveDataProp.Name}.Properties.Count - 1, new {targetType.Name}
